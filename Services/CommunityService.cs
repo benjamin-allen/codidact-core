@@ -1,4 +1,5 @@
-﻿using Codidact.Infrastructure.Persistence;
+﻿using Codidact.Domain.Entities;
+using Codidact.Infrastructure.Persistence;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Extensions;
 using System;
@@ -8,7 +9,7 @@ namespace Services
 {
 	public interface ICommunityService
 	{
-		long GetID();
+		Community GetCommunity();
 	}
 
 	public class CommunityService : ICommunityService
@@ -22,11 +23,16 @@ namespace Services
 			_httpContextAccessor = httpContextAccessor;
 		}
 
-		public long GetID()
+		/// <summary>
+		/// Gets the community from the current URL.
+		/// </summary>
+		/// <returns></returns>
+		public Community GetCommunity()
 		{
+			// Use the URL to look up the community. Assumes uniqueness.
 			string url = _httpContextAccessor.HttpContext.Request.GetDisplayUrl();
 			string domain = new Uri(url).Host;
-			return _db.Communities.Where(c => c.Url.Equals(domain)).Select(c => c.Id).Single();
+			return _db.Communities.Where(c => c.Url.Equals(domain)).Single();
 		}
 	}
 }

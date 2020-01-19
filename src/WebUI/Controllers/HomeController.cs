@@ -19,7 +19,6 @@ namespace Codidact.WebUI.Controllers
 
         public IActionResult Index()
         {
-            _communityService.GetID();
             return View();
         }
 
